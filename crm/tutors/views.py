@@ -35,3 +35,8 @@ class AddProfileToTutor(APIView):
             serializer.save(tutor=tutor)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+def tutor_list(request):
+    tutors = Tutors.objects.all()
+    return render(request, 'tutors/tutors-list.html', {'tutors': tutors})
