@@ -17,3 +17,8 @@ class LeadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Leads.objects.all()
     serializer_class = LeadUpdateSerializer
     lookup_field = "pk"
+
+
+def lead_list(request):
+    leads = Leads.objects.all()
+    return render(request, 'leads/leads-list.html', {'leads': leads})

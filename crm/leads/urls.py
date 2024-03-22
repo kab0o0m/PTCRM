@@ -5,6 +5,7 @@ app_name = "leads"
 
 urlpatterns = [
     path("", views.LeadListView.as_view(), name="lead-list"),
-    path("<int:pk>/", views.LeadRetrieveUpdateDestroy.as_view(), name="lead-update")
+    path("<int:pk>/", views.LeadRetrieveUpdateDestroy.as_view(), name="lead-update"),
+    path("view/", views.lead_list, name="view-list")
 
 ]
