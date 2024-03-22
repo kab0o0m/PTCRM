@@ -2,7 +2,9 @@ from django.shortcuts import render
 from rest_framework import generics
 from .models import Leads
 from .serializers import LeadSerializer, LeadCreateSerializer, LeadUpdateSerializer
-from django.contrib.auth.decorators import login_required
+import jwt
+from django.conf import settings
+from rest_framework.exceptions import AuthenticationFailed
 
 
 class LeadListView(generics.ListCreateAPIView):
@@ -13,6 +15,20 @@ class LeadListView(generics.ListCreateAPIView):
             return LeadCreateSerializer
         return LeadSerializer
 
+    def get_queryset(self):
+        token = self.request.headers.get(
+            'Authorization', '').split(' ')[1]
+        try:
+            decoded_payload = jwt.decode(token, 'secret', algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            print("Token has expired.")
+        except jwt.InvalidTokenError:
+            print("Invalid token.")
+
+        user_id = decoded_payload['id']
+        if user_id:
+            return Leads.objects.all()
+        
 
 class LeadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
