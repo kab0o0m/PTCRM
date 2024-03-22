@@ -5,7 +5,6 @@ from .serializers import LeadSerializer, LeadCreateSerializer, LeadUpdateSeriali
 from django.contrib.auth.decorators import login_required
 
 
-
 class LeadListView(generics.ListCreateAPIView):
     queryset = Leads.objects.all()
 
@@ -15,7 +14,6 @@ class LeadListView(generics.ListCreateAPIView):
         return LeadSerializer
 
 
-
 class LeadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Leads.objects.all()
@@ -23,7 +21,6 @@ class LeadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = "pk"
 
 
-@login_required
 def lead_list(request):
     leads = Leads.objects.all()
     return render(request, 'leads/leads-list.html', {'leads': leads})
