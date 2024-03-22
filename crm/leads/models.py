@@ -19,7 +19,7 @@ class Leads(models.Model):
     ]
 
     code = models.CharField(max_length=20)
-    description = models.CharField(max_length=1000)
+    description = models.TextField()
     client_name = models.CharField(max_length=200)
     client_number = models.CharField(max_length=15)
     status = models.CharField(
