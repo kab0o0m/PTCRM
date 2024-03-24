@@ -1,5 +1,7 @@
 from django.db import models
-
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.conf import settings
 # Create your models here.
 
 
@@ -17,6 +19,10 @@ class Tutors(models.Model):
     current_occupation = models.CharField(max_length=200)
 
     created_date = models.DateTimeField(auto_now_add=True)
+
+    resume = models.FileField(upload_to='resumes/')
+    certificate = models.FileField(upload_to='certificates/')
+    profile_picture = models.ImageField(upload_to='profile_picture/')
 
 
 class Profile(models.Model):

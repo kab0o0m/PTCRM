@@ -21,7 +21,7 @@ class TutorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tutors
         fields = (
-            'id', 'first_name', 'last_name', 'age', 'postal_code', 'phone_number', 'email', 'remarks', 'current_occupation', 'bio', 'profiles', 'created_date'
+            'id', 'first_name', 'last_name', 'age', 'postal_code', 'phone_number', 'email', 'remarks', 'current_occupation', 'bio', 'profiles', 'resume', 'profile_picture', 'certificate', 'created_date'
         )
 
 
@@ -30,7 +30,7 @@ class TutorCreateSerializer(serializers.ModelSerializer):
         model = Tutors
         fields = (
             'first_name', 'last_name', 'age', 'postal_code', 'phone_number',
-            'email', 'remarks', 'current_occupation', 'bio'
+            'email', 'remarks', 'current_occupation', 'bio', 'resume', 'profile_picture', 'certificate'
         )
 
     def create(self, validated_data):

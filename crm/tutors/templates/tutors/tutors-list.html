@@ -46,6 +46,7 @@
           <th>Phone Number</th>
           <th>Email</th>
           <th>Remarks</th>
+          <th>Profile Picture</th>
           <!-- Add more columns as needed -->
         </tr>
       </thead>
@@ -60,6 +61,13 @@
           <td>{{ tutor.phone_number }}</td>
           <td>{{ tutor.email }}</td>
           <td>{{ tutor.remarks }}</td>
+          <td>
+            <img
+              src="{{tutor.profile_picture.url}}"
+              alt=""
+              style="width: 20px; height: auto"
+            />
+          </td>
 
           <!-- Add more columns as needed -->
         </tr>
