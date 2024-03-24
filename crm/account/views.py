@@ -6,6 +6,7 @@ from .models import User
 import jwt
 from django.utils import timezone
 import datetime
+from django.shortcuts import render
 
 
 # Create your views here.
@@ -74,3 +75,8 @@ class LogoutView(APIView):
             'message': 'success'
         }
         return response
+
+
+def dashboard(request):
+
+    return render(request, 'account/dashboard.html')
