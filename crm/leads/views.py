@@ -16,7 +16,7 @@ class LeadListView(generics.ListCreateAPIView):
         return LeadSerializer
 
     # Use jwt token
-    """
+
     def get_queryset(self):
         token = self.request.headers.get(
             'Authorization', '').split(' ')[1]
@@ -30,7 +30,6 @@ class LeadListView(generics.ListCreateAPIView):
         user_id = decoded_payload['id']
         if user_id:
             return Leads.objects.all()
-    """
 
 
 class LeadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
@@ -38,6 +37,19 @@ class LeadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Leads.objects.all()
     serializer_class = LeadUpdateSerializer
     lookup_field = "pk"
+
+    def get_queryset(self):
+        token = self.request.headers.get('Authorization', '').split(' ')[1]
+        try:
+            decoded_payload = jwt.decode(token, 'secret', algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            print("Token has expired.")
+        except jwt.InvalidTokenError:
+            print("Invalid token.")
+
+        user_id = decoded_payload['id']
+        if user_id:
+            return Leads.objects.all().filter(id=user_id)
 
 
 def lead_list(request):
