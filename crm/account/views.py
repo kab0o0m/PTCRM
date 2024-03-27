@@ -33,7 +33,7 @@ class LoginView(APIView):
 
         payload = {
             'id': user.id,
-            'exp': timezone.now() + timedelta(minutes=0.5),
+            'exp': timezone.now() + timedelta(days=30),
             'iat': timezone.now()
         }
 
