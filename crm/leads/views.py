@@ -49,7 +49,8 @@ class LeadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 
         user_id = decoded_payload['id']
         if user_id:
-            return Leads.objects.all().filter(id=user_id)
+            lead_id = self.kwargs.get('pk')
+            return Leads.objects.all().filter(id=lead_id)
 
 
 def lead_list(request):
