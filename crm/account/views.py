@@ -5,7 +5,7 @@ from .serializers import UserSerializer
 from .models import User
 import jwt
 from django.utils import timezone
-import datetime
+from datetime import datetime, timedelta
 from django.shortcuts import render
 
 
@@ -33,7 +33,7 @@ class LoginView(APIView):
 
         payload = {
             'id': user.id,
-            'exp': timezone.now() + datetime.timedelta(minutes=60),
+            'exp': timezone.now() + timedelta(minutes=0.5),
             'iat': timezone.now()
         }
 
@@ -44,7 +44,8 @@ class LoginView(APIView):
 
         response.set_cookie(key='jwt', value=token, httponly=True)
         response.data = {
-            'jwt': token
+            'jwt': token,
+            'payload': payload
         }
         return response
 
@@ -80,3 +81,30 @@ class LogoutView(APIView):
 def dashboard(request):
 
     return render(request, 'account/dashboard.html')
+
+
+class RefreshTokenView(APIView):
+    def post(self, request):
+        token = request.COOKIES.get('jwt')
+
+        if not token:
+            raise AuthenticationFailed('Unauthenticated!')
+        try:
+            payload = jwt.decode(token, 'secret', algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Token expired!')
+
+        new_token = jwt.encode({
+            'id': payload['id'],
+            # Refresh token's expiration time
+            'exp': timezone.now() + timedelta(minutes=0.5),
+            'iat': timezone.now()
+        }, 'secret', algorithm='HS256')
+
+        response = Response()
+
+        response.set_cookie(key='jwt', value=new_token, httponly=True)
+        response.data = {
+            'jwt': token
+        }
+        return response
