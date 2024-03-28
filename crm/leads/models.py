@@ -33,12 +33,15 @@ class Leads(models.Model):
 class TutorInformation(models.Model):
     STATUS_CHOICES = [
         ('new', 'New'),
-        ('active', 'Active'),
-        ('inactive', 'Inactive'),
+        ('sent_profile', 'Sent Profile'),
+        ('cmi', 'CMI'),
+        ('pending', 'Pending')
     ]
 
-    tutor = models.ForeignKey(Tutors, on_delete=models.CASCADE)
-    lead = models.ForeignKey(Leads, on_delete=models.CASCADE)
+    lead = models.ForeignKey(
+        Leads, on_delete=models.CASCADE, related_name="tutors")
+    tutor = models.OneToOneField(
+        Tutors, on_delete=models.CASCADE, related_name="tutor_information")
     status = models.CharField(
         max_length=50, choices=STATUS_CHOICES, default='new')
     preferred_rate = models.CharField(max_length=30)

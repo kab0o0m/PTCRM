@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics
 from .models import Leads, TutorInformation
-from .serializers import LeadSerializer, LeadCreateSerializer, LeadUpdateSerializer, TutorInformationSerializer
+from .serializers import LeadSerializer, LeadCreateSerializer, LeadUpdateSerializer, TutorCreateSerializer
 import jwt
 from django.conf import settings
 from rest_framework.exceptions import AuthenticationFailed
@@ -61,22 +61,16 @@ def lead_list(request):
     return render(request, 'leads/leads-list.html', {'leads': leads})
 
 
-class TutorInformationAPIView(APIView):
-    def get(self, request):
-        tutor_info = TutorInformation.objects.all()
-        serializer = TutorInformationSerializer(tutor_info, many=True)
-        return Response(serializer.data)
+class AddTutorToLead(APIView):
+    def post(self, request, pk):
+        try:
+            lead = Leads.objects.get(pk=pk)
 
-    def post(self, request):
-        serializer = TutorInformationSerializer(data=request.data)
+        except Leads.DoesNotExist:
+            return Response({"error": "Tutor not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = TutorCreateSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(lead=lead)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class TutorInformationDetailView(APIView):
-    def get(self, request, lead_id):
-        tutor_info = TutorInformation.objects.filter(lead=lead_id)
-        serializer = TutorInformationSerializer(tutor_info, many=True)
-        return Response(serializer.data)
