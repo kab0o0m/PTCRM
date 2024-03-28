@@ -1,5 +1,4 @@
 from django.db import models
-
 # Create your models here.
 
 
@@ -31,3 +30,4 @@ class Leads(models.Model):
     many_tutor_link = models.CharField(max_length=500)
     created_date = models.DateTimeField(auto_now_add=True)
     last_reviewed_date = models.DateTimeField(auto_now=True)
+

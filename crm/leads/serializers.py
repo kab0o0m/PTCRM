@@ -33,4 +33,5 @@ class LeadUpdateSerializer(serializers.ModelSerializer):
             'sent_applications': {'required': False},
             'pending_applications': {'required': False},
             'last_reviewed_date': {'required': False},
+            'tutors': {'required': False}
         }
