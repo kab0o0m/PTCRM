@@ -1,4 +1,5 @@
 from django.db import models
+from tutors.models import Tutors
 # Create your models here.
 
 
@@ -23,11 +24,23 @@ class Leads(models.Model):
     client_number = models.CharField(max_length=15)
     status = models.CharField(
         max_length=50, choices=STATUS_CHOICES, default='new_case')
-    new_applications = models.IntegerField(default=0)
-    sent_applications = models.IntegerField(default=0)
-    pending_applications = models.IntegerField(default=0)
     remarks = models.CharField(max_length=500)
     many_tutor_link = models.CharField(max_length=500)
     created_date = models.DateTimeField(auto_now_add=True)
     last_reviewed_date = models.DateTimeField(auto_now=True)
 
+
+class TutorInformation(models.Model):
+    STATUS_CHOICES = [
+        ('new', 'New'),
+        ('active', 'Active'),
+        ('inactive', 'Inactive'),
+    ]
+
+    tutor = models.ForeignKey(Tutors, on_delete=models.CASCADE)
+    lead = models.ForeignKey(Leads, on_delete=models.CASCADE)
+    status = models.CharField(
+        max_length=50, choices=STATUS_CHOICES, default='new')
+    preferred_rate = models.CharField(max_length=30)
+    remarks = models.TextField()  # Assuming remarks can be longer text
+    timings = models.CharField(max_length=100)

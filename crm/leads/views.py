@@ -1,10 +1,13 @@
 from django.shortcuts import render
 from rest_framework import generics
-from .models import Leads
-from .serializers import LeadSerializer, LeadCreateSerializer, LeadUpdateSerializer
+from .models import Leads, TutorInformation
+from .serializers import LeadSerializer, LeadCreateSerializer, LeadUpdateSerializer, TutorInformationSerializer
 import jwt
 from django.conf import settings
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
 class LeadListView(generics.ListCreateAPIView):
@@ -56,3 +59,24 @@ class LeadRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
 def lead_list(request):
     leads = Leads.objects.all()
     return render(request, 'leads/leads-list.html', {'leads': leads})
+
+
+class TutorInformationAPIView(APIView):
+    def get(self, request):
+        tutor_info = TutorInformation.objects.all()
+        serializer = TutorInformationSerializer(tutor_info, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = TutorInformationSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TutorInformationDetailView(APIView):
+    def get(self, request, lead_id):
+        tutor_info = TutorInformation.objects.filter(lead=lead_id)
+        serializer = TutorInformationSerializer(tutor_info, many=True)
+        return Response(serializer.data)
