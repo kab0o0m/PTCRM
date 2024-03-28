@@ -18,7 +18,7 @@ class Leads(models.Model):
         ('incomplete', 'Incomplete'),
     ]
 
-    code = models.CharField(max_length=20)
+    code = models.CharField(max_length=20, unique=True)
     description = models.TextField()
     client_name = models.CharField(max_length=200)
     client_number = models.CharField(max_length=15)
@@ -42,7 +42,7 @@ class TutorInformation(models.Model):
         Leads, on_delete=models.CASCADE, related_name="tutors")
     tutor = models.OneToOneField(
         Tutors, on_delete=models.CASCADE, related_name="tutor_information")
-    status = models.CharField(
+    apply_status = models.CharField(
         max_length=50, choices=STATUS_CHOICES, default='new')
     preferred_rate = models.CharField(max_length=30)
     remarks = models.TextField()  # Assuming remarks can be longer text

@@ -1,11 +1,22 @@
 from rest_framework import serializers
 from .models import Leads, TutorInformation
+from tutors.models import Tutors
 
 
 class TutorSerializer(serializers.ModelSerializer):
     class Meta:
+        model = Tutors
+        fields = ('id', 'first_name', 'last_name',
+                  'email', 'phone_number', 'profiles')
+
+
+class TutorInformationSerializer(serializers.ModelSerializer):
+    tutor = TutorSerializer()  # Nested Serializer for Tutor
+
+    class Meta:
         model = TutorInformation
-        fields = ('status', 'preferred_rate', 'remarks', 'timings', 'tutor')
+        fields = ('id', 'apply_status', 'preferred_rate',
+                  'remarks', 'timings', 'tutor')
 
 
 class TutorCreateSerializer(serializers.ModelSerializer):
@@ -16,7 +27,7 @@ class TutorCreateSerializer(serializers.ModelSerializer):
 
 class LeadSerializer(serializers.ModelSerializer):
 
-    tutors = TutorSerializer(many=True)
+    tutors = TutorInformationSerializer(many=True)
 
     class Meta:
         model = Leads
