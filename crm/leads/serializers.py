@@ -1,9 +1,11 @@
 from rest_framework import serializers
 from .models import Leads, TutorInformation
 from tutors.models import Tutors
-
+from tutors.serializers import ProfileSerializer
 
 class TutorSerializer(serializers.ModelSerializer):
+    
+    profiles = ProfileSerializer(many=True)
     class Meta:
         model = Tutors
         fields = ('id', 'first_name', 'last_name',
@@ -22,7 +24,7 @@ class TutorInformationSerializer(serializers.ModelSerializer):
 class TutorCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = TutorInformation
-        fields = '__all__'
+        fields = ('tutor', 'preferred_rate', 'remarks', 'timings')
 
 
 class LeadSerializer(serializers.ModelSerializer):

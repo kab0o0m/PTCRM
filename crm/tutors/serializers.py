@@ -5,7 +5,7 @@ from .models import Tutors, Profile
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = '__all__'
+        fields = ('additional_information', 'created_date')
 
 
 class ProfileCreateSerializer(serializers.ModelSerializer):

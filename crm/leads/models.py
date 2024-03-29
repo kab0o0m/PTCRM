@@ -40,7 +40,7 @@ class TutorInformation(models.Model):
 
     lead = models.ForeignKey(
         Leads, on_delete=models.CASCADE, related_name="tutors")
-    tutor = models.OneToOneField(
+    tutor = models.ForeignKey(
         Tutors, on_delete=models.CASCADE, related_name="tutor_information")
     apply_status = models.CharField(
         max_length=50, choices=STATUS_CHOICES, default='new')

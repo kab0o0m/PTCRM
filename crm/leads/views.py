@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework import generics
 from .models import Leads, TutorInformation
 from .serializers import LeadSerializer, LeadCreateSerializer, LeadUpdateSerializer, TutorCreateSerializer
@@ -62,14 +62,38 @@ def lead_list(request):
 
 
 class AddTutorToLead(APIView):
+    """
     def post(self, request, pk):
         try:
-            lead = Leads.objects.get(pk=pk)
+            lead = Leads.objects.get(id=pk)
 
         except Leads.DoesNotExist:
             return Response({"error": "Tutor not found."}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = TutorCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(lead=lead)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    """
+
+    def post(self, request, code):  # Change 'pk' to 'code'
+        try:
+            # Use 'code' to filter instead of 'pk'
+            lead = Leads.objects.get(code=code)
+        except Leads.DoesNotExist:
+            return Response({"error": "Lead not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        existing_tutor_info = lead.tutors.filter(
+            tutor_id=request.data.get('tutor'))
+        if existing_tutor_info.exists():
+            # If exists, update the existing entry instead of creating a new one
+            serializer = TutorCreateSerializer(
+                existing_tutor_info.first(), data=request.data)
+        else:
+            # If not exists, create a new entry
+            serializer = TutorCreateSerializer(data=request.data)
+
         if serializer.is_valid():
             serializer.save(lead=lead)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
