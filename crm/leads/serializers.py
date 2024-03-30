@@ -3,9 +3,11 @@ from .models import Leads, TutorInformation
 from tutors.models import Tutors
 from tutors.serializers import ProfileSerializer
 
+
 class TutorSerializer(serializers.ModelSerializer):
-    
+
     profiles = ProfileSerializer(many=True)
+
     class Meta:
         model = Tutors
         fields = ('id', 'first_name', 'last_name',
@@ -24,7 +26,7 @@ class TutorInformationSerializer(serializers.ModelSerializer):
 class TutorCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = TutorInformation
-        fields = ('tutor', 'preferred_rate', 'remarks', 'timings')
+        fields = ('preferred_rate', 'remarks', 'timings')
 
 
 class LeadSerializer(serializers.ModelSerializer):
