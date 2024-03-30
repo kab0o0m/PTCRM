@@ -1,10 +1,8 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from rest_framework import generics
-from .models import Leads, TutorInformation
+from .models import Leads
 from .serializers import LeadSerializer, LeadCreateSerializer, LeadUpdateSerializer, TutorCreateSerializer
 import jwt
-from django.conf import settings
-from rest_framework.exceptions import AuthenticationFailed
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
