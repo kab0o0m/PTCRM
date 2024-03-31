@@ -11,7 +11,7 @@ class TutorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tutors
         fields = ('id', 'first_name', 'last_name',
-                  'email', 'phone_number', 'profiles')
+                  'email', 'phone_number', 'current_occupation', 'profiles')
 
 
 class TutorInformationSerializer(serializers.ModelSerializer):
