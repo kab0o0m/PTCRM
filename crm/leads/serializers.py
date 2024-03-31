@@ -22,6 +22,20 @@ class TutorInformationSerializer(serializers.ModelSerializer):
         fields = ('id', 'apply_status', 'preferred_rate',
                   'remarks', 'timings', 'tutor')
 
+    extra_kwargs = {
+        'apply_status': {'required': False},
+        'preferred_rate': {'required': False},
+        'remarks': {'required': False},
+        'timings': {'required': False},
+        'tutor': {'required': False}
+    }
+
+
+class TutorStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TutorInformation
+        fields = ('id', 'apply_status')
+
 
 class TutorCreateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -47,10 +61,12 @@ class LeadCreateSerializer(serializers.ModelSerializer):
 
 
 class LeadUpdateSerializer(serializers.ModelSerializer):
+    tutors = TutorStatusSerializer(many=True, required=False)
+
     class Meta:
         model = Leads
         fields = ('code', 'description', 'client_name', 'client_number',
-                  'remarks', 'many_tutor_link', 'status', 'last_reviewed_date')
+                  'remarks', 'many_tutor_link', 'status', 'last_reviewed_date', 'tutors')
         extra_kwargs = {
             'code': {'required': False},
             'description': {'required': False},
@@ -65,3 +81,5 @@ class LeadUpdateSerializer(serializers.ModelSerializer):
             'last_reviewed_date': {'required': False},
             'tutors': {'required': False}
         }
+
+

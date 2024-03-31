@@ -99,8 +99,6 @@ class AddTutorToLead(APIView):
                 serializer = TutorCreateSerializer(
                     existing_tutor_info, data=request.data)
 
-
-
             if serializer.is_valid():
                 serializer.save(lead=lead)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
