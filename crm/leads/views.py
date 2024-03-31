@@ -87,7 +87,6 @@ class AddTutorToLead(APIView):
         tutor_phone_number = request.data.get('tutor_number')
         existing_tutor = Tutors.objects.filter(
             phone_number=tutor_phone_number).first()
-
         if existing_tutor:
             # Check if the tutor exists in the lead's tutors
             existing_tutor_info = lead.tutors.filter(tutor=existing_tutor)
@@ -96,9 +95,12 @@ class AddTutorToLead(APIView):
                 serializer = TutorCreateSerializer(
                     existing_tutor_info.first(), data=request.data)
             else:
-                # If not exists, create a new entry
-                serializer = TutorCreateSerializer(data=request.data)
-                print(serializer)
+                existing_tutor_info = lead.tutors.create(tutor=existing_tutor)
+                serializer = TutorCreateSerializer(
+                    existing_tutor_info, data=request.data)
+
+
+
             if serializer.is_valid():
                 serializer.save(lead=lead)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
